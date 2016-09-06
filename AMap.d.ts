@@ -1,4 +1,4 @@
-export namespace AMap {
+declare namespace AMap {
     export interface Pixel {
         constructor(x: number, y: number);
         getX(): number;
@@ -380,5 +380,3 @@ export namespace AMap {
         info: string;
     }
 }
-
-declare var Map: AMap.Map;
