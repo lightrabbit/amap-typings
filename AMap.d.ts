@@ -380,3 +380,5 @@ export namespace AMap {
         info: string;
     }
 }
+
+declare var Map: AMap.Map;
