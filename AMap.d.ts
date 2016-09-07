@@ -1,7 +1,7 @@
 declare namespace AMap {
     export type EventCallback = (...args: any[]) => void;
     export type GenericEventCallback<T> = (T) => void;
-    
+
     export const plugin: (pluginNames: string[], ready?: () => void) => void;
 
     export const event: {
@@ -338,8 +338,69 @@ declare namespace AMap {
     /**
      * 点标记。
      */
-    export class Marker {
+    export class Marker extends EventBindable {
         constructor(options?: MarkerOptions);
+
+        markOnAMAP(obj: {
+            name: string,
+            position: LngLat
+        });
+
+        getOffset(): Pixel;
+        setOffset(offset: Pixel);
+
+        setAnimation(animate: string);
+        getAnimation(): string;
+
+        setClickable(clickable: boolean);
+        getClickable(): boolean;
+
+        getPosition(): LngLat;
+        setPosition(lnglat: LngLat);
+
+        setAngle(angle: number);
+        getAngle(): number;
+
+        setLabel(label: {
+            content?: string,
+            offset?: Pixel
+        });
+        getLabel(): {
+            content?: string,
+            offset?: Pixel
+        };
+
+        setzIndex(index: number);
+
+        getIcon(): string|Icon;
+        setIcon(content: string|Icon);
+        
+        setDraggable(draggable: boolean);
+        getDraggable(): boolean;
+
+        hide();
+        show();
+
+        setCursor(cursor: string);
+
+        setContent(content: string| HTMLElement);
+        getContent(): string;
+
+        moveAlong(lnglatlist: LngLat[], speed?: number, f?: (k: number) => number, circlable?: boolean);
+        moveTo(lnglat: LngLat, speed?: number, f?: (k: number) => number);
+        stopMove();
+        setMap(map: Map);
+        getMap(): Map;
+        setTitle(title: string);
+        getTitle(): string;
+        setTop(isTop: boolean);
+        getTop(): boolean;
+        setShadow(icon: Icon);
+        getShadow(): Icon;
+        setShape(shape: MarkerShape);
+        getShape(): MarkerShape;
+        setExtData(ext: any);
+        getExtData(): any;
     }
 
     export interface CircleOptions {
@@ -504,7 +565,7 @@ declare namespace AMap {
             circleOptions?: CircleOptions,
             panToLocation?: boolean,
             zoomToAccuracy?: boolean,
-            userNative?: boolean
+            useNative?: boolean
         });
 
         isSupported(): boolean;
