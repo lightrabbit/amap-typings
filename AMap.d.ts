@@ -100,19 +100,7 @@ declare namespace AMap {
         detectRetina: boolean;
     }
 
-    export class TileLayer {
-        constructor(tileOpt?: {
-            map: Map,
-            tileSize?: number,
-            tileUrl?: string,
-            errorUrl?: string,
-            getTileUrl?: (x, y, z) => string,
-            zIndex?: number,
-            opacity?: number,
-            zooms?: number[],
-            detectRetina?: boolean
-        });
-
+    abstract class Layer extends EventBindable {
         setOpacity(alpha: number);
         show();
         hide();
@@ -124,15 +112,48 @@ declare namespace AMap {
         setMap(map: Map);
     }
 
+    export class TileLayer extends Layer {
+        constructor(tileOpt?: {
+            map: Map,
+            tileSize?: number,
+            tileUrl?: string,
+            errorUrl?: string,
+            getTileUrl?: (x, y, z) => string,
+            zIndex?: number,
+            opacity?: number,
+            zooms?: number[],
+            detectRetina?: boolean
+        });
+    }
+
     export namespace TileLayer {
-        export class Satellite extends TileLayer {
-            constructor(sateOpt?: {
+
+        abstract class MapTypeLayer extends Layer {
+            constructor(options?: {
                 map: Map,
                 zIndex?: number,
                 opacity?: number,
                 zooms?: number[],
                 detectRetina?: boolean
-            });            
+            });
+        }
+
+        export class Satellite extends MapTypeLayer {           
+        }
+
+        export class RoadNet extends MapTypeLayer {
+        }
+
+        export class Traffic extends MapTypeLayer {
+            constructor(options?: {
+                map: Map,
+                zIndex?: number,
+                opacity?: number,
+                zooms?: number[],
+                detectRetina?: boolean,
+                autoRefresh?: boolean,
+                interval?: number
+            });
         }
     }
 
