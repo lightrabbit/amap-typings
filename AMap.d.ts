@@ -259,8 +259,8 @@ declare namespace AMap {
         clearMap();
         destroy();
         plugin(name: string| string[], callback: () => void);
-        addControl(obj: IMapControl);
-        removeControl(obj: IMapControl);
+        addControl(obj: IMapControl|Object);
+        removeControl(obj: IMapControl|Object);
         clearInfoWindow();
         pixelToLngLat(pixel: Pixel, level: number): LngLat;
         lnglatToPixel(lnglat: LngLat, level: number): Pixel;
@@ -434,6 +434,37 @@ declare namespace AMap {
         contains(point: LngLat): boolean;
     }
 
+    export interface PolygonOptions {
+        map?: Map;
+        zIndex?: number;
+        path?: LngLat[]|LngLat[][];
+        strokeColor?: string;
+        strokeOpacity?: number;
+        strokeWeight?: number;
+        fillColor?: string;
+        fillOpacity?: number;
+        extData?: any;
+        strokeStyle?: string;
+        strokeDasharray?: number[];
+    }
+
+    export class Polygon extends EventBindable {
+        constructor(options?: PolygonOptions);
+
+        setPath(path: LngLat[]|LngLat[][]);
+        getPath(): LngLat[]|LngLat[][];
+        setOptions(opt: PolygonOptions);
+        getOptions(): PolygonOptions;
+        getBounds(): Bounds;
+        getArea(): number;
+        hide();
+        show();
+        setMap(map: Map);
+        setExtData(ext: any);
+        getExtData(): any;
+        contains(point: LngLat): boolean;
+    }
+
     export interface IMapControl {
         show();
         hide();
@@ -593,5 +624,105 @@ declare namespace AMap {
     export class CitySearch extends EventBindable {
         getLocalCity(callback: (status: string, result: string | CitySearchResult) => void);
         getCityByIp(ip: string, callback: (status: string, result: string | CitySearchResult) => void);
+    }
+
+    export class Poi {
+
+    }
+
+    export const enum DrivingPolicy {
+        LEAST_TIME,
+        LEAST_FEE,
+        LEAST_DISTANCE,
+        REAL_TRAFFIC
+    }
+
+    export interface ViaCity {
+        name: string;
+        citycode: string;
+        adcode: string;
+        districts: District[]
+    }
+
+    export interface District {
+        name: string;
+        adcode: string;
+    }
+
+    export interface TMC {
+        lcode: string;
+        distance: number;
+        status: string;
+    }
+
+    export interface DriveStep {
+        start_location: LngLat;
+        end_location: LngLat;
+        instruction: string;
+        action: string;
+        assist_action: string;
+        orientation: string;
+        road: string;
+        distance: number;
+        tolls: number;
+        tolls_distance: number;
+        toll_road: string;
+        time: number;
+        path: LngLat[],
+        cities?: ViaCity[],
+        tmcs?: TMC[]
+    }
+
+    export interface DriveRoute {
+        distance: number;
+        time: number;
+        policy: string;
+        tolls: number;
+        tolls_distance: number;
+        steps: DriveStep[]
+    }
+
+    export interface DrivingResult {
+        info: string;
+        origin: LngLat;
+        destination: LngLat|Poi;
+        start: Poi;
+        waypoints: Poi;
+        taxi_cost: number;
+        routes: DriveRoute[]
+    }
+
+    export class Driving extends EventBindable {
+        constructor(options?: {
+            policy?: DrivingPolicy,
+            extensions?: string,
+            map?: Map,
+            panel?: string|HTMLElement,
+            hideMarkers?: boolean,
+            showTraffic?: boolean
+        });
+
+        search(origin:LngLat, destination: LngLat, opts?: {
+            waypoints: LngLat[]
+        }, callback?: (status: string, result: string|DrivingResult) => void);
+        search(point: {
+            keyword: string,
+            city: string
+        }[], callback: (status: string, result: string|DrivingResult) => void);
+
+        setPolicy(policy: DrivingPolicy);
+        setAvoidPolygons(path: LngLat[][]);
+        setAvoidRoad(road: string);
+        clearAvoidRoad();
+        clearAvoidPolygons();
+        getAvlidPolygons(): LngLat[][];
+        getAvoidRoad(): string;
+        clear();
+        searchOnAMAP(obj: {
+            origin?: LngLat,
+            originName?: string,
+            destination?: LngLat,
+            destinationName?: string
+        });
     }
 }
