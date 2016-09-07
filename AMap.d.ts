@@ -96,11 +96,11 @@ declare namespace AMap {
         crs?: string;
         animateEnable?: boolean;
         isHotspot?: boolean;
-        defaultLayer: TileLayer;
+        defaultLayer?: TileLayer;
         rotateEnable?: boolean;
         resizeEnable?: boolean;
         showIndoorMap?: boolean;
-        indoorMap: IndoorMap;
+        indoorMap?: IndoorMap;
         expandZoomRange?: boolean;
         dragEnable?: boolean;
         zoomEnable?: boolean;
