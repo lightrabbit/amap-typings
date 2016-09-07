@@ -12,7 +12,7 @@ declare namespace AMap {
             handler：事件功能函数（必填），
             context：事件上下文（可选，缺省时，handler中this指向参数instance引用的对象，否则this指向context引用的对象）
          */
-        static addDomListener(instance: HTMLElement, eventName: string, handler: EventCallback, context?: any): EventListener;
+        static addDomListener(instance: Object, eventName: string, handler: EventCallback, context?: any): EventListener;
 
         /**
          * 注册对象事件：给对象注册事件，并返回eventListener。运行AMap.event.removeListener(eventListener)可以删除该事件的监听器。
@@ -22,12 +22,12 @@ declare namespace AMap {
             handler：事件功能函数（必填），
             context：事件上下文（可选，缺省时，handler中this指向参数instance引用的对象，否则this指向context引用的对象）
          */
-        static addListener(instance: HTMLElement, eventName: string, handler: EventCallback, context?: any): EventListener;
+        static addListener(instance: Object, eventName: string, handler: EventCallback, context?: any): EventListener;
 
         /**
          * 类似于addListener，但处理程序会在处理完第一个事件后将自已移除。
          */
-        static addListenerOnce(instance: HTMLElement, eventName: string, handler: EventCallback, context?: any): EventListener;
+        static addListenerOnce(instance: Object, eventName: string, handler: EventCallback, context?: any): EventListener;
 
         /**
          * 删除由上述 event.addDomListener 和 event.addListener 传回的指定侦听器。
@@ -37,7 +37,7 @@ declare namespace AMap {
         /**
          * 触发非DOM事件：触发非DOM事件eventName，extArgs将扩展到事件监听函数（handler）接受到的event参数中。如:在extArgs内写入{m:10,p:2}，eventName监听函数（handler）可以接收到包含m,p两个key值的event对象。
          */
-        static trigger(instance: HTMLElement, eventName: string, extArgs: any);
+        static trigger(instance: Object, eventName: string, extArgs: any);
     }
 
     /**
@@ -154,6 +154,9 @@ declare namespace AMap {
                 autoRefresh?: boolean,
                 interval?: number
             });
+
+            interval: number;
+            autoRefresh: boolean;
         }
     }
 
@@ -267,10 +270,10 @@ declare namespace AMap {
 
     export class Icon {
         constructor(options?: {
-            size: Size,
-            imageOffset: Pixel,
-            image: string,
-            imageSize: Size
+            size?: Size,
+            imageOffset?: Pixel,
+            image?: string,
+            imageSize?: Size
         });
 
         getImageSize(): Size;
@@ -429,6 +432,53 @@ declare namespace AMap {
         getLocation(): { lng:number, lat:number };
         show();
         hide();
+    }
+
+    export class InfoWindow extends EventBindable {
+        constructor(options?: {
+            isCustom?: boolean,
+            autoMove?: boolean,
+            closeWhenClickMap?: boolean,
+            content?: string | HTMLElement,
+            size?: Size,
+            offset?: Pixel,
+            position?: LngLat,
+            showShadow?: boolean
+        });
+
+        open(map: Map, pos: LngLat);
+        close();
+        getIsOpen(): boolean;
+        setPosition(lnglat: LngLat);
+        getPosition(): LngLat;
+        setSize(size: Size);
+        getSize(): Size;
+    }
+
+    export class AdvancedInfoWindow extends EventBindable {
+        constructor(options?: {
+            autoMove?: boolean,
+            closeWhenClickMap?: boolean,
+            content?: string|HTMLElement,
+            offset?: Pixel,
+            position?: LngLat,
+            panel?: string|HTMLElement,
+            searchRadius?: number,
+            placeSearch?: boolean,
+            driving?: boolean,
+            walking?: boolean,
+            transit?: boolean,
+            asOrigin?: boolean,
+            asDestination?: boolean
+        });
+
+        open(map: Map, pos: LngLat);
+        close();
+        getIsOpen(): boolean;
+        setPosition(lnglat: LngLat);
+        getPosition(): LngLat;
+        setContent(content: string|HTMLElement);
+        getContent(): string;
     }
 
     export class Geolocation extends EventBindable {
