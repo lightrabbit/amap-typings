@@ -1,4 +1,4 @@
-declare module AMap {
+declare namespace AMap {
     export interface Pixel {
         constructor(x: number, y: number);
         getX(): number;
