@@ -1,19 +1,19 @@
 declare namespace AMap {
-    export interface Pixel {
+    export class Pixel {
         constructor(x: number, y: number);
         getX(): number;
         equals(point: Pixel): boolean;
         toString(): string;
     }
 
-    export interface Size {
+    export class Size {
         constructor(width: number, height: number);
         getWidth(): number;
         getHeight(): number;
         toString(): string;
     }
 
-    export interface LngLat {
+    export class LngLat {
         constructor(lng: number, lat:number);
         offset(w:number, s:number): LngLat;
         distance(lnglat: LngLat): number;
@@ -23,7 +23,7 @@ declare namespace AMap {
         toString(): string;
     }
 
-    export interface Bounds {
+    export class Bounds {
         constructor(southWest: LngLat, northEast: LngLat);
         contains(point: LngLat): boolean;
         getCenter(): LngLat;
@@ -32,7 +32,7 @@ declare namespace AMap {
         toString(): string;
     }
 
-    export interface TileLayerOptions {
+    interface TileLayerOptions {
         map: Map;
         tileSize: number;
         tileUrl: string;
@@ -44,7 +44,7 @@ declare namespace AMap {
         detectRetina: boolean;
     }
 
-    export interface TileLayer {
+    export class TileLayer {
         constructor(tileOpt?: {
             map: Map,
             tileSize?: number,
@@ -69,7 +69,7 @@ declare namespace AMap {
     }
 
     export namespace TileLayer {
-        export interface Satellite extends TileLayer {
+        export class Satellite extends TileLayer {
             constructor(sateOpt?: {
                 map: Map,
                 zIndex?: number,
@@ -113,7 +113,7 @@ declare namespace AMap {
         features?: string[];
     }
 
-    export interface View2D {
+    export class View2D {
         constructor(opt: {
             center?: LngLat,
             rotation?: number,
@@ -122,7 +122,7 @@ declare namespace AMap {
         });
     }
 
-    export interface Map {
+    export class Map {
         
         constructor(mapDiv: string, opts?: MapOptions);
 
@@ -173,8 +173,8 @@ declare namespace AMap {
         clearMap();
         destroy();
         plugin(name: string| string[], callback: () => void);
-        addControl(obj: MapControl);
-        removeControl(obj: MapControl);
+        addControl(obj: IMapControl);
+        removeControl(obj: IMapControl);
         clearInfoWindow();
         pixelToLngLat(pixel: Pixel, level: number): LngLat;
         lnglatToPixel(lnglat: LngLat, level: number): Pixel;
@@ -187,7 +187,7 @@ declare namespace AMap {
         setDefaultLayer(layer: TileLayer);
     }
 
-    export interface Icon {
+    export class Icon {
         constructor(options?: {
             size: Size,
             imageOffset: Pixel,
@@ -202,7 +202,7 @@ declare namespace AMap {
     /**
      * MarkerShape用于划定Marker的可点击区域范围。需要注意的是，在IE浏览器中图标透明区域默认为不触发事件，因此MarkerShape在IE中不起作用。
      */
-    export interface MarkerShape {
+    export class MarkerShape {
         constructor(options: {
             /**
              * 
@@ -251,7 +251,7 @@ declare namespace AMap {
     /**
      * 点标记。
      */
-    export interface Marker {
+    export class Marker {
         constructor(options?: MarkerOptions);
     }
 
@@ -269,7 +269,7 @@ declare namespace AMap {
         strokeDasharray?: number[];
     }
 
-    export interface Circle {
+    export class Circle {
         constructor(options?: CircleOptions);
         setCenter(lnglat: LngLat);
         getCenter(): LngLat;
@@ -286,20 +286,23 @@ declare namespace AMap {
         contains(point: LngLat): boolean;
     }
 
-    export interface MapControl {
+    export interface IMapControl {
         show();
         hide();
     }
 
-    export interface MapType extends MapControl {
+    export class MapType implements IMapControl {
         constructor(options?: {
             defaultType?: number;
             showTraffic?: boolean;
             showRoad?: boolean;
         });
+
+        show();
+        hide();
     }
 
-    export interface OverView extends MapControl {
+    export class OverView implements IMapControl {
         constructor(options?: {
             tileLayer?: TileLayer[],
             isOpen?: boolean,
@@ -310,14 +313,16 @@ declare namespace AMap {
         close();
         setTileLayer(layer: TileLayer);
         getTileLayer(): TileLayer;
+        show();
+        hide();
     }
 
-    export interface Scale extends MapControl {
+    export interface Scale extends IMapControl {
         offset: Pixel;
         position: string;
     }
 
-    export interface ToolBar extends MapControl {
+    export class ToolBar implements IMapControl {
         constructor(options?: {
             offset?: Pixel,
             position?: string,
@@ -341,9 +346,11 @@ declare namespace AMap {
         showLocation();
         doLocation();
         getLocation(): { lng:number, lat:number };
+        show();
+        hide();
     }
 
-    export interface Geolocation {
+    export class Geolocation {
         constructor(options: {
             enableHighAccuracy?: boolean,
             timeout?: number,
