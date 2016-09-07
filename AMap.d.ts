@@ -1,4 +1,60 @@
 declare namespace AMap {
+    export type EventCallback = (...args: any[]) => void;
+    export type GenericEventCallback<T> = (T) => void;
+    
+    export class event {
+
+        /**
+         * 注册DOM对象事件：给DOM对象注册事件，并返回eventListener。运行AMap.event.removeListener(eventListener)可以删除该事件的监听器。
+            参数：
+            instance：需注册事件的DOM对象（必填），
+            eventName：事件名称（必填），
+            handler：事件功能函数（必填），
+            context：事件上下文（可选，缺省时，handler中this指向参数instance引用的对象，否则this指向context引用的对象）
+         */
+        static addDomListener(instance: HTMLElement, eventName: string, handler: EventCallback, context?: any): EventListener;
+
+        /**
+         * 注册对象事件：给对象注册事件，并返回eventListener。运行AMap.event.removeListener(eventListener)可以删除该事件的监听器。
+            参数：
+            instance：需注册事件的对象（必填），
+            eventName：事件名称（必填），
+            handler：事件功能函数（必填），
+            context：事件上下文（可选，缺省时，handler中this指向参数instance引用的对象，否则this指向context引用的对象）
+         */
+        static addListener(instance: HTMLElement, eventName: string, handler: EventCallback, context?: any): EventListener;
+
+        /**
+         * 类似于addListener，但处理程序会在处理完第一个事件后将自已移除。
+         */
+        static addListenerOnce(instance: HTMLElement, eventName: string, handler: EventCallback, context?: any): EventListener;
+
+        /**
+         * 删除由上述 event.addDomListener 和 event.addListener 传回的指定侦听器。
+         */
+        static removeListener(listener: EventListener);
+
+        /**
+         * 触发非DOM事件：触发非DOM事件eventName，extArgs将扩展到事件监听函数（handler）接受到的event参数中。如:在extArgs内写入{m:10,p:2}，eventName监听函数（handler）可以接收到包含m,p两个key值的event对象。
+         */
+        static trigger(instance: HTMLElement, eventName: string, extArgs: any);
+    }
+
+    /**
+     * 此对象用于表示地图、覆盖物、叠加层上的各种鼠标事件返回，包含以下字段：
+     */
+    export interface MapsEventOptions {
+        lnglat: LngLat;
+        pixel: Pixel;
+        type: string;
+        target: Object;
+    }
+
+    abstract class EventBindable {
+        on(eventName: string, callback: EventCallback);
+        off(eventName: string, callback: EventCallback);
+    }
+
     export class Pixel {
         constructor(x: number, y: number);
         getX(): number;
@@ -122,7 +178,7 @@ declare namespace AMap {
         });
     }
 
-    export class Map {
+    export class Map extends EventBindable {
         
         constructor(mapDiv: string, opts?: MapOptions);
 
@@ -185,6 +241,7 @@ declare namespace AMap {
         setFeatures(features: string[]);
         getFeatures(): string[];
         setDefaultLayer(layer: TileLayer);
+
     }
 
     export class Icon {
@@ -302,7 +359,7 @@ declare namespace AMap {
         hide();
     }
 
-    export class OverView implements IMapControl {
+    export class OverView extends EventBindable implements IMapControl {
         constructor(options?: {
             tileLayer?: TileLayer[],
             isOpen?: boolean,
@@ -317,12 +374,15 @@ declare namespace AMap {
         hide();
     }
 
-    export interface Scale extends IMapControl {
+    export class Scale extends EventBindable implements IMapControl {
         offset: Pixel;
         position: string;
+
+        show();
+        hide();
     }
 
-    export class ToolBar implements IMapControl {
+    export class ToolBar extends EventBindable implements IMapControl {
         constructor(options?: {
             offset?: Pixel,
             position?: string,
@@ -350,7 +410,7 @@ declare namespace AMap {
         hide();
     }
 
-    export class Geolocation {
+    export class Geolocation extends EventBindable {
         constructor(options: {
             enableHighAccuracy?: boolean,
             timeout?: number,
@@ -385,5 +445,15 @@ declare namespace AMap {
 
     export interface GeolocationError {
         info: string;
+    }
+
+    export interface CitySearchResult {
+        city: string;
+        bounds: Bounds;
+    }
+
+    export class CitySearch extends EventBindable {
+        getLocalCity(callback: (status: string, result: string | CitySearchResult) => void);
+        getCityByIp(ip: string, callback: (status: string, result: string | CitySearchResult) => void);
     }
 }
