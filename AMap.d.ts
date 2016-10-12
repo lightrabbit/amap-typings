@@ -255,7 +255,7 @@ declare namespace AMap {
         zoomOut();
         panTo(position: LngLat);
         panBy(x: number, y: number);
-        setFitView(overlayList: any[]);
+        setFitView(overlayList?: any[]);
         clearMap();
         destroy();
         plugin(name: string| string[], callback: () => void);
