@@ -551,6 +551,8 @@ declare namespace AMap {
         getPosition(): LngLat;
         setSize(size: Size);
         getSize(): Size;
+        getContent(): string;
+        setContent(content: string|HTMLElement);
     }
 
     export class AdvancedInfoWindow extends EventBindable {
