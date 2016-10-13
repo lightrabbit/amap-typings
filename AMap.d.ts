@@ -240,7 +240,7 @@ declare namespace AMap {
         setLayers(layers: TileLayer[]);
         add(overlayers: any[]);
         remove(overlayers: any[]);
-        getAllOverlays(type: string);
+        getAllOverlays(type: string): Marker[] | Circle[] | Polygon[] | Polyline[];
         setCenter(position: LngLat);
         setZoomAndCenter(zoomLevel: number, center: LngLat);
         setCity(city:string, callback: () => void);
@@ -463,6 +463,41 @@ declare namespace AMap {
         setExtData(ext: any);
         getExtData(): any;
         contains(point: LngLat): boolean;
+    }
+
+    export interface PolylineOptions {
+        map?: Map;
+        zIndex?: number;
+        geodesic?: boolean;
+        isOutline?: boolean;
+        outlineColor?: string;
+        path?: LngLat[];
+        strokeColor?: string;
+        strokeOpacity?: number;
+        strokeWeight?: number;
+        strokeStyle?: string;
+        strokeDasharray?: number[];
+        extData?: any;
+    }
+
+    export class Polyline extends EventBindable {
+        constructor(options?: PolylineOptions);
+
+        setPath(path: LngLat[]);
+        getPath(): LngLat[];
+
+        setOptions(opt: PolylineOptions);
+        getOptions(): PolylineOptions;
+
+        getLength(): number;
+        getBounds(): Bounds;
+        hide();
+        show();
+        
+        setMap(map: Map);
+        setExtData(ext: any);
+        getExtData(): any;
+        
     }
 
     export interface IMapControl {
