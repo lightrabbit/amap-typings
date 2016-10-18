@@ -4,7 +4,7 @@ declare namespace AMap {
 
     export const plugin: (pluginNames: string[], ready?: () => void) => void;
 
-    export class event {
+    export namespace event {
         /**
          * 注册DOM对象事件：给DOM对象注册事件，并返回eventListener。运行AMap.event.removeListener(eventListener)可以删除该事件的监听器。
             参数：
@@ -13,7 +13,7 @@ declare namespace AMap {
             handler：事件功能函数（必填），
             context：事件上下文（可选，缺省时，handler中this指向参数instance引用的对象，否则this指向context引用的对象）
          */
-        static addDomListener(instance: HTMLElement, eventName: string, handler: EventCallback, context?: any): EventListener;
+        const addDomListener: (instance: HTMLElement, eventName: string, handler: EventCallback, context?: any) => EventListener;
 
         /**
          * 注册对象事件：给对象注册事件，并返回eventListener。运行AMap.event.removeListener(eventListener)可以删除该事件的监听器。
@@ -23,23 +23,62 @@ declare namespace AMap {
             handler：事件功能函数（必填），
             context：事件上下文（可选，缺省时，handler中this指向参数instance引用的对象，否则this指向context引用的对象）
          */
-        static addListener(instance: Object, eventName: string, handler: EventCallback, context?: any): EventListener;
+        const addListener: (instance: Object, eventName: string, handler: EventCallback, context?: any) => EventListener;
 
         /**
          * 类似于addListener，但处理程序会在处理完第一个事件后将自已移除。
          */
-        static addListenerOnce(instance: Object, eventName: string, handler: EventCallback, context?: any): EventListener;
+        const addListenerOnce: (instance: Object, eventName: string, handler: EventCallback, context?: any) => EventListener;
 
         /**
          * 删除由上述 event.addDomListener 和 event.addListener 传回的指定侦听器。
          */
-        static removeListener(listener: EventListener): void;
+        const removeListener: (listener: EventListener) => void;
 
         /**
          * 触发非DOM事件：触发非DOM事件eventName，extArgs将扩展到事件监听函数（handler）接受到的event参数中。如:在extArgs内写入{m:10,p:2}，eventName监听函数（handler）可以接收到包含m,p两个key值的event对象。
          */
-        static trigger(instance: Object, eventName: string, extArgs: any): void;
+        const trigger: (instance: Object, eventName: string, extArgs: any) => void;
     }
+
+    
+    // export class event {
+    //     /**
+    //      * 注册DOM对象事件：给DOM对象注册事件，并返回eventListener。运行AMap.event.removeListener(eventListener)可以删除该事件的监听器。
+    //         参数：
+    //         instance：需注册事件的DOM对象（必填），
+    //         eventName：事件名称（必填），
+    //         handler：事件功能函数（必填），
+    //         context：事件上下文（可选，缺省时，handler中this指向参数instance引用的对象，否则this指向context引用的对象）
+    //      */
+    //     static addDomListener(instance: HTMLElement, eventName: string, handler: EventCallback, context?: any): EventListener;
+
+    //     /**
+    //      * 注册对象事件：给对象注册事件，并返回eventListener。运行AMap.event.removeListener(eventListener)可以删除该事件的监听器。
+    //         参数：
+    //         instance：需注册事件的对象（必填），
+    //         eventName：事件名称（必填），
+    //         handler：事件功能函数（必填），
+    //         context：事件上下文（可选，缺省时，handler中this指向参数instance引用的对象，否则this指向context引用的对象）
+    //      */
+    //     static addListener(instance: Object, eventName: string, handler: EventCallback, context?: any): EventListener;
+
+    //     /**
+    //      * 类似于addListener，但处理程序会在处理完第一个事件后将自已移除。
+    //      */
+    //     static addListenerOnce(instance: Object, eventName: string, handler: EventCallback, context?: any): EventListener;
+
+    //     /**
+    //      * 删除由上述 event.addDomListener 和 event.addListener 传回的指定侦听器。
+    //      */
+    //     static removeListener(listener: EventListener): void;
+
+    //     /**
+    //      * 触发非DOM事件：触发非DOM事件eventName，extArgs将扩展到事件监听函数（handler）接受到的event参数中。如:在extArgs内写入{m:10,p:2}，eventName监听函数（handler）可以接收到包含m,p两个key值的event对象。
+    //      */
+    //     static trigger(instance: Object, eventName: string, extArgs: any): void;
+    // }
+    
 
     /**
      * 此对象用于表示地图、覆盖物、叠加层上的各种鼠标事件返回，包含以下字段：
