@@ -57,38 +57,157 @@ declare namespace AMap {
         off(eventName: string, callback: EventCallback);
     }
 
+
+/* --------------------------- 基础类 --------------------------- */
+/* 参考地址:http://lbs.amap.com/api/javascript-api/reference/core */
+
+    /**
+     * 像素坐标，确定地图上的一个像素点。
+     */
     export class Pixel {
+
+        /**
+         * 构造一个像素坐标对象。
+         */
         constructor(x: number, y: number);
+        /**
+         * 获得X方向像素坐标
+         */
         getX(): number;
+
+        /**
+         * 获得Y方向像素坐标
+         */
+        getY(): number;
+
+        /**
+         * 当前像素坐标与传入像素坐标是否相等
+         */
         equals(point: Pixel): boolean;
+
+        /**
+         * 以字符串形式返回像素坐标对象
+         */
         toString(): string;
     }
-
+    
+    /**
+     * 地物对象的像素尺寸
+     */
     export class Size {
+
+        /**
+         * 构造尺寸对象
+         * @param {number} width 宽度，单位：像素
+         * @param {number} height 高度，单位：像素
+         */
         constructor(width: number, height: number);
+
+        /**
+         * 获得宽度
+         */
         getWidth(): number;
+
+        /**
+         * 获得高度
+         */
         getHeight(): number;
+
+        /**
+         * 以字符串形式返回尺寸大小对象
+         */
         toString(): string;
     }
 
+    /**
+     * 经纬度坐标，确定地图上的一个点
+     */
     export class LngLat {
+
+        /**
+         * 构造一个地理坐标对象
+         * @param {number} lng 经度
+         * @param {number} lat 纬度
+         */
         constructor(lng: number, lat:number);
+
+        /**
+         * 当前经纬度坐标值经度移动w，纬度移动s，得到新的坐标。
+         * 
+         * @param {number} w 经度，向右移为正值，单位：米
+         * @param {number} s 纬度，向上移为正值，单位：米
+         */
         offset(w:number, s:number): LngLat;
-        distance(lnglat: LngLat): number;
+
+        /**
+         * 计算当前经纬度和传入经纬度或者经纬度数组连线之间的地面距离，单位为米
+         * 
+         * @param {(LngLat | [number, number])} lnglat 传入的经纬度
+         */
+        distance(lnglat: LngLat | [number, number]): number;
+        
+        /**
+         * 获取经度值
+         */
         getLng(): number;
+
+        /**
+         * 获取纬度值
+         */
         getLat(): number;
+
+        /**
+         * 判断当前坐标对象与传入坐标对象是否相等
+         * 
+         * @param {LngLat} lnglat 传入坐标对象
+         */
         equals(lnglat: LngLat): boolean;
+
+        /**
+         * LngLat对象以字符串的形式返回
+         */
         toString(): string;
     }
 
+    /**
+     * 地物对象的经纬度矩形范围
+     */
     export class Bounds {
+
+        /**
+         * 构造一个矩形范围
+         * @param {LngLat} southWest 西南角经纬度坐标
+         * @param {LngLat} northEast 东北角经纬度坐标
+         */
         constructor(southWest: LngLat, northEast: LngLat);
+
+        /**
+         * 判断指定点坐标是否在矩形范围内
+         * @param {LngLat} point 指定点
+         */
         contains(point: LngLat): boolean;
+
+        /**
+         * 获取当前Bounds的中心点经纬度坐标
+         */
         getCenter(): LngLat;
+
+        /**
+         * 获取西南角坐标
+         */
         getSouthWest(): LngLat;
+
+        /**
+         * 获取东北角坐标
+         */
         getNorthEast(): LngLat;
+
+        /**
+         * 以字符串形式返回地物对象的矩形范围
+         */
         toString(): string;
     }
+/* --------------------------- 基础类 --------------------------- */
 
     interface TileLayerOptions {
         map: Map;
